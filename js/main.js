@@ -40,6 +40,22 @@ if (heroContent) {
   revealObserver.unobserve(heroContent);
 }
 
+// Active nav section tracker via IntersectionObserver
+const navAnchors = document.querySelectorAll('.nav__links a[href^="#"]');
+const sections = [...navAnchors].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navAnchors.forEach(a => a.removeAttribute('aria-current'));
+      const active = document.querySelector(`.nav__links a[href="#${entry.target.id}"]`);
+      if (active) active.setAttribute('aria-current', 'true');
+    }
+  });
+}, { threshold: 0.3, rootMargin: `-${getComputedStyle(document.documentElement).getPropertyValue('--nav-h')} 0px 0px 0px` });
+
+sections.forEach(s => sectionObserver.observe(s));
+
 // Contact form (stub — wire to backend when ready)
 const form = document.getElementById('contactForm');
 if (form) {
