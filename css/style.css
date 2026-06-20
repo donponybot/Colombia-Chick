@@ -34,7 +34,7 @@
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
 }
 
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: var(--nav-h); }
 
 body {
   background: var(--shadow);
@@ -75,7 +75,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
   letter-spacing: .2em;
   text-transform: uppercase;
   padding: 1rem 2.25rem;
-  transition: all .4s var(--ease-out);
+  transition: all .4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
@@ -90,7 +90,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
   inset: 0;
   background: var(--gold);
   transform: translateX(-101%);
-  transition: transform .4s var(--ease-out);
+  transition: transform .4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 0;
 }
 .btn--ghost:hover::before { transform: translateX(0); }
@@ -117,7 +117,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
 .reveal {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+  transition: opacity .8s cubic-bezier(0.16, 1, 0.3, 1), transform .8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.visible {
   opacity: 1;
@@ -192,7 +192,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
   background: var(--gold);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform .3s var(--ease-out);
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav__links a:hover { color: var(--gold); }
 .nav__links a:hover::after { transform: scaleX(1); }
@@ -201,7 +201,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
   display: none;
   flex-direction: column;
   gap: 5px;
-  padding: 4px;
+  padding: 10px 8px;
 }
 .nav__menu-btn span {
   display: block;
@@ -215,12 +215,10 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
 .nav__menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
 
 .nav__mobile {
-  display: none;
   background: rgba(13,13,13,.98);
   border-top: 1px solid var(--border);
   padding: 2rem;
 }
-.nav__mobile.open { display: block; }
 .nav__mobile ul { display: flex; flex-direction: column; gap: 1.5rem; }
 .nav__mobile a {
   font-family: var(--ff-ui);
@@ -234,6 +232,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
    HERO
    =================================================== */
 .hero {
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   align-items: center;
@@ -258,24 +257,11 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
 .butterfly {
   position: absolute;
   background: var(--gold);
-  opacity: 0;
-  animation: butterflyFloat 12s var(--ease-in-out) infinite;
-}
-.butterfly::before,
-.butterfly::after {
-  content: '';
-  position: absolute;
-  border-radius: 50% 0 50% 50%;
-  background: inherit;
-}
-
-/* Using clip-path butterfly shapes */
-.butterfly {
   clip-path: polygon(50% 50%, 20% 20%, 0% 40%, 15% 70%, 50% 60%, 85% 70%, 100% 40%, 80% 20%);
-  animation: butterflyFloat 14s ease-in-out infinite;
+  animation: butterflyFloat 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 .butterfly--xl { width: 80px; height: 50px; }
-.butterfly--lg { width: 60px; height: 38px; opacity: 0; }
+.butterfly--lg { width: 60px; height: 38px; }
 .butterfly--md { width: 40px; height: 25px; }
 .butterfly--sm { width: 28px; height: 18px; }
 .butterfly--xs { width: 18px; height: 11px; }
@@ -540,7 +526,7 @@ h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 400; line-height: 
 .atelier-note {
   padding: 2rem;
   border: 1px solid var(--border);
-  transition: border-color .3s, transform .3s var(--ease-out);
+  transition: border-color .3s, transform .3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .atelier-note:hover {
   border-color: rgba(201,168,76,.4);
@@ -611,7 +597,7 @@ cite {
   width: 100%;
   aspect-ratio: 1;
   border-radius: var(--radius);
-  transition: transform .4s var(--ease-out);
+  transition: transform .4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .swatch:hover .swatch__color { transform: scale(1.04); }
 .swatch__info strong {
@@ -729,7 +715,7 @@ cite {
   font-family: var(--ff-body);
   font-size: 1rem;
   outline: none;
-  transition: border-color .3s;
+  transition: border-color .3s, box-shadow .3s;
   resize: vertical;
   border-radius: var(--radius);
 }
@@ -737,6 +723,12 @@ cite {
 .form-group textarea::placeholder { color: var(--text-muted); font-style: italic; }
 .form-group input:focus,
 .form-group textarea:focus { border-color: rgba(201,168,76,.6); }
+.form-group input:focus-visible,
+.form-group textarea:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201,168,76,.25);
+  outline: 2px solid transparent;
+}
 
 .contact__form .btn--gold {
   width: 100%;
@@ -807,6 +799,24 @@ cite {
 }
 
 /* ===================================================
+   REDUCED MOTION
+   =================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .hero__scroll-line { animation: none; }
+  .butterfly { animation: none; }
+}
+
+/* ===================================================
    RESPONSIVE
    =================================================== */
 @media (max-width: 1024px) {
@@ -838,8 +848,14 @@ cite {
    FINE DETAILS / CRYSTAL SHIMMER
    =================================================== */
 @keyframes crystalShimmer {
-  0%, 100% { opacity: .6; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: .85; }
+  50% { opacity: 1; filter: brightness(1.08); }
+}
+
+/* Crystal AB + Ice AB swatches shimmer */
+.palette__swatches .swatch:nth-child(3) .swatch__color,
+.palette__swatches .swatch:nth-child(4) .swatch__color {
+  animation: crystalShimmer 3s ease-in-out infinite;
 }
 
 /* Thin gold rule used before h2's in some sections */

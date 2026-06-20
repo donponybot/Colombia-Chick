@@ -6,20 +6,25 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-// Mobile menu
+// Mobile menu with aria-expanded
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
+
+function closeMobileMenu() {
+  mobileMenu.hidden = true;
+  menuBtn.classList.remove('open');
+  menuBtn.setAttribute('aria-expanded', 'false');
+  menuBtn.setAttribute('aria-label', 'Open menu');
+}
+
 menuBtn.addEventListener('click', () => {
-  const open = mobileMenu.classList.toggle('open');
+  const open = mobileMenu.hidden;
+  mobileMenu.hidden = !open;
   menuBtn.classList.toggle('open', open);
+  menuBtn.setAttribute('aria-expanded', String(open));
   menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 });
-document.querySelectorAll('.mobile-link').forEach(a => {
-  a.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    menuBtn.classList.remove('open');
-  });
-});
+document.querySelectorAll('.mobile-link').forEach(a => a.addEventListener('click', closeMobileMenu));
 
 // Scroll reveal
 const revealObserver = new IntersectionObserver(
@@ -28,10 +33,11 @@ const revealObserver = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// Hero reveal on load
+// Hero reveal on load (separate from observer to ensure it always shows)
 const heroContent = document.querySelector('.hero__content');
 if (heroContent) {
-  setTimeout(() => heroContent.classList.add('visible'), 200);
+  heroContent.classList.add('visible');
+  revealObserver.unobserve(heroContent);
 }
 
 // Contact form (stub — wire to backend when ready)
@@ -49,21 +55,3 @@ if (form) {
     }, 1200);
   });
 }
-
-// Butterfly parallax on hero (subtle)
-const heroSection = document.getElementById('hero');
-const bflies = document.querySelectorAll('.butterfly');
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      const progress = Math.min(window.scrollY / (heroSection?.offsetHeight || 600), 1);
-      bflies.forEach((b, i) => {
-        const dir = i % 2 === 0 ? 1 : -1;
-        b.style.transform = `translateY(${progress * 40 * dir}px)`;
-      });
-      ticking = false;
-    });
-    ticking = true;
-  }
-}, { passive: true });
